@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title> </title>
+
+<script src="jquery.js"></script>
+<!--<link rel="stylesheet" href="styles.css" type="text/css">-->
+
+<style type="text/css">
+
+* { margin: 0; padding: 0; }
+
+body {
+	background: #222;
+	color: #fff;
+
+	font-family: verdana, sans-serif;
+}
+
+input {
+	padding: 0.5em;
+}
+
+ul#trail li {
+	padding-left: 1em;
+	line-height: 1.5;
+}
+
+#restart {
+	display: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="decision">
+	<input type="submit" value="Leave">
+	<input type="submit" value="Go Further">
+</div>
+
+<div id="restart">
+	<input type="submit" value="New Adventure">
+</div>
+
+<ul id="trail"> </ul>
+
+<script type="text/javascript">
+
+var cards;
+
+$(document).ready(function() {
+	init();
+
+	$('input[value="Go Further"]').click(flip);
+	$('input[value="New Adventure"]').click(reset);
+});
+
+function flip() {
+	var roll = getRandom(0, cards.length);
+	
+	if (cards[roll].substring(0, 4) == "trap")
+		secondTrap(cards[roll]);
+
+	$('#trail').append("<li>" + cards[roll] + "</li>");
+
+	cards.splice(roll, 1);
+}
+
+function getRandom(from, to) {
+	return Math.floor(Math.random() * to) + from;
+}
+
+function secondTrap(trap) {
+	var history = $('#trail li');
+	for (var i = 0; i < history.length; i++) {
+		var item = $(history[i]).html();
+
+		if (trap === item)
+			dead();
+	}
+}
+
+function dead() {
+	$('#decision').hide();
+	$('#restart').show();
+}
+
+function reset() {
+	$('#trail').empty();
+	$('#decision').show();
+	$('#restart').hide();
+
+	init();
+}
+
+function init() {
+	cards = [
+		"treasure 2",
+		"treasure 3",
+		"treasure 3",
+		"treasure 5",
+		"treasure 5",
+		"treasure 6",
+		"treasure 7",
+		"treasure 7",
+		"treasure 8",
+		"treasure 8",	
+		"treasure 10",
+		"treasure 12",
+		"treasure 15",
+		"treasure 17",
+		"treasure 18",
+		"trap 1", 
+		"trap 1", 
+		"trap 1", 
+		"trap 2", 
+		"trap 2", 
+		"trap 2", 
+		"trap 3", 
+		"trap 3", 
+		"trap 3", 
+		"trap 4", 
+		"trap 4", 
+		"trap 4", 
+		"trap 5", 
+		"trap 5", 
+		"trap 5"
+	];
+}
+
+</script>
+
+
+
+
+</body>
+</html>
