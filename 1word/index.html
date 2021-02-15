@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<title>1word selected puzzles</title>
+
+<script type="text/javascript" src="../jquery-min.js"></script>
+<script type="text/javascript" src="../jquery.orbit-1.2.3.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" href="../orbit-1.2.3.css" type="text/css" />
+
+<style type="text/css">
+
+* { margin: 0; padding: 0; }
+body { background: #000; }
+
+ul.orbit-bullets, .orbit-wrapper { margin: 1.5em auto; }
+
+ul.orbit-bullets { 	
+	position: relative;
+	width: 180px;			/* 18px per square */
+}
+
+ul.orbit-bullets li { background-color: #ccc; margin-bottom: 5px; }
+ul.orbit-bullets li.active { background-color: #369; }
+
+div.slider-nav {
+    display: none;
+}
+
+#featured img {
+    height: 550px;
+}
+
+#solution-bar {
+    clear: both;
+    
+    width: 300px;
+    margin: 0 auto;
+    padding-top: 1em;
+
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#solution-bar input { padding: 0.5em; }
+#solution-bar input[type="text"] { 
+    border: 1px solid #222; 
+    background-color: #222; 
+    margin-left: 1em;
+    padding: 0.25em;
+    width: 8em;
+
+    font-family: "Consolas", monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1em;
+    letter-spacing: 0.15em;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="featured"> 
+     <img src="00.png" alt=" " data-caption="#"/>
+     <img src="01.png" alt=" " data-caption="#"/>
+     <img src="02.png" alt=" " data-caption="#"/>
+     <img src="03.png" alt=" " data-caption="#"/>
+     <img src="04.png" alt=" " data-caption="#"/>
+     <img src="05.png" alt=" " data-caption="#"/>
+     <img src="06.png" alt=" " data-caption="#"/>
+     <img src="07.png" alt=" " data-caption="#"/>
+     <img src="08.png" alt=" " data-caption="#"/>
+     <img src="09.png" alt=" " data-caption="#"/>
+     <img src="10.png" alt=" " data-caption="#"/>
+     <img src="11.png" alt=" " data-caption="#"/>
+     <img src="12.png" alt=" " data-caption="#"/>
+     <img src="13.png" alt=" " data-caption="#"/>
+     <img src="14.png" alt=" " data-caption="#"/>
+     <img src="15.png" alt=" " data-caption="#"/>
+     <img src="16.png" alt=" " data-caption="#"/>
+     <img src="17.png" alt=" " data-caption="#"/>
+     <img src="18.png" alt=" " data-caption="#"/>
+     <img src="19.png" alt=" " data-caption="#"/>
+     <img src="20.png" alt=" " data-caption="#"/>
+     <img src="21.png" alt=" " data-caption="#"/>
+     <img src="22.png" alt=" " data-caption="#"/>
+     <img src="23.png" alt=" " data-caption="#"/>
+     <img src="24.png" alt=" " data-caption="#"/>
+     <img src="25.png" alt=" " data-caption="#"/>
+     <img src="26.png" alt=" " data-caption="#"/>
+     <img src="27.png" alt=" " data-caption="#"/>
+     <img src="28.png" alt=" " data-caption="#"/>
+     <img src="29.png" alt=" " data-caption="#"/>
+</div>
+
+<div id="solution-bar">
+    <input type="submit" value="Show Answer">
+    <input type="text" id="answer-bar">
+</div>
+
+<script type="text/javascript">
+
+     $(window).load(function() {
+         $('#featured').orbit({
+            timer: false,
+            bullets: true
+         });
+     });
+
+     $(document).ready(function() {
+        $('#solution-bar input[type="submit"]').click(showAnswer);
+     });
+
+     function showAnswer() {
+        $('#answer-bar').css("color", "#FF8C00");
+        var puzzleId = $('ul.orbit-bullets li').index($('li.active'));
+        $('#answer-bar').val(puzzleAnswers[puzzleId]);
+        $('#answer-bar').animate({color: "#222"}, 3000);
+     }
+
+     var puzzleAnswers = [
+        "school", "dance", "nose", "circus", "season", "house", "snow", "smile", "type", "cherry", "wood", "ride", "light", "doctor", "spin", "north", "change", "hide", "holiday", "job", "zero", "tip", "pass", "follow", "wax", "new", "progress", "joke", "rhyme", "poem"
+     ];
+
+</script>
+
+
+
+</body>
+</html>
