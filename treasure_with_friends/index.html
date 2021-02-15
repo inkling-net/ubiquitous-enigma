@@ -14,123 +14,328 @@
 * { margin: 0; padding: 0; }
 
 body {
-	background: #222;
-	color: #fff;
-
-	font-family: verdana, sans-serif;
+    background-color: #000;
+    font-family: "Gill Sans MT", sans-serif;
 }
 
-input {
-	padding: 0.5em;
+#ui, #input, #status {
+    padding: 15px;
+    background-color: #222;
+    color: #ccc;
 }
 
-ul#trail li {
-	padding-left: 1em;
-	line-height: 1.5;
+#temple-scroll {
+    height: 275px;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
-#restart {
-	display: none;
+.chamber {
+    display: inline-block;
+    vertical-align: top;
+
+    width: 225px;
+    height: 250px;
 }
+
+.chamber h1 {
+    padding-right: 5px;
+    text-align: right;
+    font-size: 28px;
+}
+.chamber h1.gems, .gems { color: #2E8B57; }
+.chamber h1.hazard, .hazard { color: #DC143C; }
+
+.explored {
+    background-image: -webkit-linear-gradient(bottom, #FFBC47 0%, #000000 100%);
+}
+
+.newly-explored {
+    background-image: -webkit-radial-gradient(left bottom, ellipse farthest-side, #FFBC47 0%, #000000 100%);
+}
+
+.newly-explored:after {
+    position: relative;
+    top: -30px;
+    content: url("http://inkling.net/sandbox/twf/indy.png");
+}
+
+.unexplored {
+    border: 1px solid #666;
+    border-width: 0 1px;
+    margin-right: 10px;
+}
+
+#input {
+    clear: both;
+    text-align: center;
+}
+
+#input input {
+    padding: 0.25em;
+}
+
+#how-to-play {
+    margin: 1em 0 0 3em;
+    color: #666;
+}
+
+#how-to-play li {
+    margin-bottom: 0.5em;
+}
+
+#how-to-play #instructions {
+    margin-right: 20em;
+}
+
+#how-to-play #stats {
+    width: 15em;
+    float: right;
+}
+
 
 </style>
 </head>
 
 <body>
 
-<div id="decision">
-	<input type="submit" value="Leave">
-	<input type="submit" value="Go Further">
-</div>
+  <div id="ui">
+      <p class="run-number">Run #<span>0</span></p>
+      <p class="at-risk"><span>0</span> gems at risk.</p>
+      <p class="total"><span>0</span> gems total.</p>
+  </div>
 
-<div id="restart">
-	<input type="submit" value="New Adventure">
-</div>
+  <div id="temple-scroll">
 
-<ul id="trail"> </ul>
+  </div>
+
+  <div id="input">
+
+  </div>
+
+  <div id="status">
+
+  </div>
+
+  <div id="how-to-play">
+      <div id="stats">
+          <h3>Some statistics</h3>
+          <br>
+          <ul>
+              <li>30 possible chambers</li>
+              <li>15 of them contain hazards</li>
+              <li>5 different hazard types</li>
+              <li>3 of each hazard</li>
+          </ul>
+      </div>
+      <ul id="instructions">
+          <li>You are a famous archaeologist exploring through a dangerous temple. Each chamber of the temple you progress through has either <span class="gems">gems</span> or a <span class="hazard">hazard</span>.</li>
+          <li>Progress through the temple by clicking "Proceed". Your gem counter will increase if you encounter treasure. This treasure is considered AT RISK; you must LEAVE the temple in order to keep it.</li>
+          <li>If you enter a chamber and it's a hazard type that has been seen before, you die and lose all the gems that were at risk.</li>
+          <li>The goal is to see how many gems you can accumulate with only <strong>FIVE</strong> runs. (so when the counter reads #6, you're done.) Please refresh page to start over.</li>
+      </ul>
+  </div>
 
 <script type="text/javascript">
 
-var cards;
-
-$(document).ready(function() {
-	init();
-
-	$('input[value="Go Further"]').click(flip);
-	$('input[value="New Adventure"]').click(reset);
+$('document').ready(function() {
+    newRound(false);
 });
 
-function flip() {
-	var roll = getRandom(0, cards.length);
-	
-	if (cards[roll].substring(0, 4) == "trap")
-		secondTrap(cards[roll]);
+/*********** game functions, heh. *************************************/
 
-	$('#trail').append("<li>" + cards[roll] + "</li>");
+var cards;
 
-	cards.splice(roll, 1);
+
+function init() {
+	cards = [
+		"2",
+		"3",
+		"3",
+		"5",
+		"5",
+		"6",
+		"7",
+		"7",
+		"8",
+		"8",
+		"10",
+		"12",
+		"15",
+		"17",
+		"18",
+		"spiders",
+		"spiders",
+		"spiders",
+		"cave-in",
+		"cave-in",
+		"cave-in",
+		"mummies",
+		"mummies",
+		"mummies",
+		"spike pit",
+		"spike pit",
+		"spike pit",
+		"snakes",
+		"snakes",
+		"snakes"
+	];
+}
+
+
+/**********************************************************************/
+
+function explore() {
+    $('#input').empty();
+    $('#status').empty();
+
+    // 1. find chamber w/newly-explored
+    var current = $('#temple-scroll div.chamber.newly-explored');
+
+    // 2. replace it with explored
+    current.removeClass("newly-explored");
+    current.addClass("explored");
+
+    // 3. select unexplored chamber
+    var unexplored = $('#temple-scroll div.chamber.unexplored');
+    unexplored.removeClass("unexplored");
+    unexplored.addClass("newly-explored");
+
+    // 4. pick a card from the deck and assign it to newly-explored
+    assignACard(unexplored);
+
+    // 5. check if dead
+    if (checkIfDead())
+        youDead();
+
+    var confirm = $('<input>');
+    confirm.attr("type", "submit");
+    confirm.attr("value", "Okay");
+
+    $('#input').append(confirm);
+    $('#input input[value="Okay"]').click(makeYourChoice);
+}
+
+function youDead() {
+    var atRisk = $('#ui p.at-risk span').html();
+
+    $('#status').html("You have died! " + atRisk + " gems were lost.");
+    $('#ui p.at-risk span').html(0);
+}
+
+function checkIfDead() {
+    // 1. check newly explored for a hazard
+    var current = $('#temple-scroll div.chamber.newly-explored h1');
+
+    // 2. if it is a hazard, check against old hazards
+    if (current.hasClass("hazard")) {
+        var currentHazard = current.html();
+        var prevHazards = $('#temple-scroll div.chamber.explored h1.hazard');
+
+        for (var i = 0; i < prevHazards.length; i++) {
+            var prevHazard = prevHazards[i].innerHTML;
+            if (prevHazard === currentHazard)
+                return true;
+        }
+
+    }
+    else {
+        // not a hazard, don't have to worry about it
+    }
+
+    return false;
+}
+
+function assignACard(chamber) {
+    var roll = getRandom(0, cards.length);
+
+    var h1 = $('<h1>');
+
+    if (isNaN(parseInt(cards[roll])))
+        h1.addClass("hazard");
+    else {
+        h1.addClass("gems");
+        addToAtRisk(cards[roll]);
+    }
+
+    h1.html(cards[roll]);
+    chamber.append(h1);
+
+    cards.splice(roll, 1);
+}
+
+function addToAtRisk(num) {
+    var atRisk = parseInt($('#ui p.at-risk span').html());
+    atRisk += parseInt(num);
+    $('#ui p.at-risk span').html(atRisk);
+}
+
+function cashOut(displayStatus) {
+    var atRisk = parseInt($('#ui p.at-risk span').html());
+    var total = parseInt($('#ui p.total span').html());
+    total += atRisk;
+
+    $('#ui p.total span').html(total);
+    $('#ui p.at-risk span').html(0);
+
+    if (displayStatus)
+        $('#status').html("You made it back to camp! " + atRisk + " gems were gained.");
+}
+
+function makeYourChoice() {
+    if (checkIfDead())
+        newRound(false);
+    else
+        addUnexploredChamber();
+
+    $('#input').empty();
+
+    var leave = $('<input>');
+    leave.attr("type", "submit");
+    leave.attr("value", "Leave");
+
+    $('#input').append(leave);
+    $('#input input[value="Leave"]').click(newRound);
+
+    var proceed = $('<input>');
+    proceed.attr("type", "submit");
+    proceed.attr("value", "Proceed");
+
+    $('#input').append(proceed);
+    $('#input input[value="Proceed"]').click(explore);
+}
+
+function newRound(displayStatus) {
+    cashOut(displayStatus);
+    $('#temple-scroll').empty();
+
+    var startingChamber = $('<div>');
+    startingChamber.addClass("chamber");
+    startingChamber.addClass("newly-explored");
+    $('#temple-scroll').append(startingChamber);
+
+    // increment run number
+    var runNumber = parseInt($('#ui p.run-number span').html());
+    $('#ui p.run-number span').html(runNumber + 1);
+
+    init();
+    makeYourChoice();
+}
+
+function addUnexploredChamber() {
+    var chamber = $('<div>');
+    chamber.addClass("chamber");
+    chamber.addClass("unexplored");
+
+    $('#temple-scroll').append(chamber);
+    $('#temple-scroll').animate({scrollLeft: '+=225'});
+
+
 }
 
 function getRandom(from, to) {
 	return Math.floor(Math.random() * to) + from;
-}
-
-function secondTrap(trap) {
-	var history = $('#trail li');
-	for (var i = 0; i < history.length; i++) {
-		var item = $(history[i]).html();
-
-		if (trap === item)
-			dead();
-	}
-}
-
-function dead() {
-	$('#decision').hide();
-	$('#restart').show();
-}
-
-function reset() {
-	$('#trail').empty();
-	$('#decision').show();
-	$('#restart').hide();
-
-	init();
-}
-
-function init() {
-	cards = [
-		"treasure 2",
-		"treasure 3",
-		"treasure 3",
-		"treasure 5",
-		"treasure 5",
-		"treasure 6",
-		"treasure 7",
-		"treasure 7",
-		"treasure 8",
-		"treasure 8",	
-		"treasure 10",
-		"treasure 12",
-		"treasure 15",
-		"treasure 17",
-		"treasure 18",
-		"trap 1", 
-		"trap 1", 
-		"trap 1", 
-		"trap 2", 
-		"trap 2", 
-		"trap 2", 
-		"trap 3", 
-		"trap 3", 
-		"trap 3", 
-		"trap 4", 
-		"trap 4", 
-		"trap 4", 
-		"trap 5", 
-		"trap 5", 
-		"trap 5"
-	];
 }
 
 </script>
