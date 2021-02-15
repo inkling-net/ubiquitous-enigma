@@ -1,0 +1,291 @@
+* { margin: 0; padding: 0; }
+
+body {
+	font-family: 'Jockey One', sans-serif;
+	font-size: 2em;
+	background-color: #222;
+}
+
+#more h2, #more h3, #missions h2 { font-family: 'News Cycle', sans-serif; }
+
+#timeline {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#timeline ul {
+	list-style-type: none;
+	padding-bottom: 12em;
+}
+
+#timeline ul li {
+	width: 12.5em;
+	padding: 0.5em;
+	margin: 0.5em;
+	
+	color: #555;
+}
+
+#timeline ul li h1, #more h1 {
+	font-size: 1.25em;
+}
+
+#timeline ul li h2, #more h2 {
+	font-size: 1em;
+}
+
+#timeline ul li.lynchpin { background-color: #abb; }
+#timeline ul li.ripple { background-color: #bba; }
+
+#timeline ul li.active {
+	background-color: #fff;
+	color: #000;
+}
+
+#more {
+	background-color: #fff;
+	border: 1px solid black;
+
+	position: absolute;
+	z-index: 10;
+	top: 0.5em;
+	right: 0.75em;
+	padding: 0.5em;
+	width: 43%;		
+	
+	display: none;
+	
+	font-size: 1.25em;
+}
+
+#more h1 {
+	text-align: right;
+
+	padding-right: 0.25em;
+	margin-bottom: 0.25em;
+	background-color: #666;
+	color: #fff;
+}
+
+#more h1.lynchpin { background: #688; }
+#more h1.ripple { background: #886; }
+
+#more h2 {
+	line-height: 0.85;
+	margin-bottom: 0.5em;
+}
+
+#more h3 {
+	font-size: 0.6em;
+	color: #666;
+	line-height: 1;
+}
+
+#more h4 {
+	margin-top: 1em;
+	font-size: 0.5em;
+}
+
+#more ul { 
+	padding-left: 0.5em;
+	line-height: 1;	
+}
+
+#more ul li {
+	display: inline;
+	padding-right: 0.5em;
+}
+
+#more h3.flip {
+	margin-top: 1em;
+	padding: 0.5em;
+	text-align: right;
+	
+	background-color: #666;
+	color: #333;
+}
+
+#more div.icon {
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 30px;
+	height: 30px;
+	
+	float: left;	
+	margin: -0.25em 0.5em 0 0;	
+	border: 2px solid #CD5C5C;
+}
+
+#more h3.flip.gtg, #more h3 div.gtg {
+	color: #90EE90;
+	border-color: #90EE90;
+}
+
+#missions li.civilian li.gtg {
+	color: #556B2F;
+}
+
+#more div.icon.pistol { background-image: url("images/icon_pistol.png"); }
+#more div.icon.armor { background-image: url("images/icon_armor.png"); }
+#more div.icon.disguise { background-image: url("images/icon_disguise.png"); }
+#more div.icon.tool { background-image: url("images/icon_tool.png"); }
+#more div.icon.bomb { background-image: url("images/icon_bomb.png"); }
+
+#navi_tabs {	
+	position: absolute;
+	bottom: 6em;
+	right: 0;
+}
+
+#navi_tabs ul li{
+	float: right;
+	padding: 0.25em 0.5em;
+	margin: 0 0.5em;
+	
+	background: #666;	
+	font-size: 0.8em;
+}
+
+#navi_tabs li.inactive {
+	background: #333;
+	color: #222;
+}
+
+#missions, #cards {
+	position: absolute;
+	z-index: 6;
+	bottom: 0;
+	
+	background: #666;
+	height: 6em;
+	width: 100%;
+}
+
+#missions ul {
+	padding-left: 0.5em;
+}
+
+#missions ul li.civilian h1 {
+	margin-bottom: 0.25em;
+	padding: 0.15em 0;
+	background-color: #789;
+
+	font-size: 1em;
+	text-align: center;
+	font-weight: 100;
+}
+
+#missions ul li.civilian.returned h1 { 
+	background-color: #556B2F;
+}
+
+#missions ul li.civilian {
+	background-color: #e0e0ff;
+	margin: 0.5em 0.5em 0 0;
+	padding: 0.25em 0.25em 0.5em 0.25em;
+
+	width: 5em;
+	line-height: 1;	
+	font-size: 0.8em;
+	
+	float: left;
+}
+
+#missions #status h1, #missions #status h2 {
+	padding: 1em 0.5em 0.5em 0.5em;
+	line-height: 1;
+	font-size: 0.85em;
+	text-align: right;
+}
+
+#missions #status h2 {
+	font-size: 0.7em;
+}
+
+#cards { display: none; }
+
+#more  ul, #navi_tabs ul, #missions ul, #cards ul, #trade_window ul { list-style-type: none; }
+
+#cards ul li, #trade_window ul li {
+	background: #ffffe0;
+	width: 4.75em;
+	height: 7em;
+	
+	float: left;
+	margin: 1em 0 0 0.25em;
+	padding: 0.5em;
+	border: 3px solid #666;
+	
+	font-size: 0.6em;
+	text-transform: uppercase;
+	text-align: center;
+	
+	background-repeat: no-repeat;
+	background-position: 50% 75%;
+}
+
+#cards ul li.trademe {
+	border-color: #DAA520;
+}
+
+#cards #trade, #cards #draw {
+	position: absolute;
+	border: 3px outset #999;
+	padding: 0.6em 0.25em;
+	right: 0.25em;
+	
+	font-size: 0.75em;
+	width: 4.5em;
+	
+	color: #555;
+	text-align: center;
+}
+
+#cards #draw { top: 1em; }
+
+#cards #trade {
+	bottom: 0.75em;
+}
+
+#cards div#draw.active, #cards div#trade.active {
+	background: #999;
+	color: #000;
+}
+
+#trade_window {
+	width: 20em;
+	height: 10em;
+	
+	position: fixed;
+	z-index: 20;
+	left: 50%;
+	top: 5em;
+	margin-left: -10em;
+	padding: 1em 0 0 1em;
+	
+	background: #999;
+	border: 3px double #000;
+		
+	display: none;
+}
+
+#trade_window h4 {
+	position: absolute;
+	bottom: 0.5em;
+	right: 1em;
+}
+
+#timeline ul li:hover, 
+#more #links li:hover, 
+#navi_tabs ul li:hover, 
+#cards ul li:hover, 
+#cards div.active:hover,
+#missions ul li.civilian li:hover, 
+#trade_window ul li:hover, 
+#trade_window h4:hover {
+	cursor: pointer;
+}
